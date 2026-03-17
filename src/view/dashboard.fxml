@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.DashboardController"
+      spacing="10"
+      style="-fx-background-color: #f0f4f8; -fx-padding: 20;">
+
+    <!-- Header -->
+    <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label fx:id="welcomeLabel"
+               text="Welcome!"
+               style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="TaskMaster"
+               style="-fx-text-fill: #3498db; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Add Task Form -->
+    <VBox spacing="8"
+          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label text="Add New Task"
+               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+        <HBox spacing="10">
+            <TextField fx:id="titleField"
+                       promptText="Task Title"
+                       style="-fx-padding: 8;"
+                       HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="courseField"
+                       promptText="Course (e.g. CIS096)"
+                       style="-fx-padding: 8;"
+                       HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="deadlineField"
+                       promptText="Deadline (e.g. 2026-04-11)"
+                       style="-fx-padding: 8;"
+                       HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <ComboBox fx:id="priorityBox"
+                      promptText="Priority"
+                      style="-fx-padding: 5;"
+                      HBox.hgrow="ALWAYS"
+                      maxWidth="Infinity"/>
+            <ComboBox fx:id="typeBox"
+                      promptText="Task Type"
+                      style="-fx-padding: 5;"
+                      HBox.hgrow="ALWAYS"
+                      maxWidth="Infinity"/>
+            <Button text="Add Task"
+                    onAction="#handleAddTask"
+                    style="-fx-background-color: #27ae60;
+                           -fx-text-fill: white;
+                           -fx-padding: 8 20;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;"/>
+        </HBox>
+
+        <Label fx:id="messageLabel" text=""
+               style="-fx-font-size: 12px;"/>
+    </VBox>
+
+    <!-- Task Table -->
+    <VBox spacing="8" VBox.vgrow="ALWAYS"
+          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label text="My Tasks"
+               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+        <TableView fx:id="taskTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="titleColumn"    text="Title"    prefWidth="200"/>
+                <TableColumn fx:id="courseColumn"   text="Course"   prefWidth="100"/>
+                <TableColumn fx:id="deadlineColumn" text="Deadline" prefWidth="120"/>
+                <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="80"/>
+                <TableColumn fx:id="statusColumn"   text="Status"   prefWidth="120"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="10">
+            <Button text="Mark as Complete"
+                    onAction="#handleMarkComplete"
+                    style="-fx-background-color: #3498db;
+                           -fx-text-fill: white;
+                           -fx-padding: 8 15;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;"/>
+            <Button text="Delete Task"
+                    onAction="#handleDeleteTask"
+                    style="-fx-background-color: #e74c3c;
+                           -fx-text-fill: white;
+                           -fx-padding: 8 15;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+</VBox>

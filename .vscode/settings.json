@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.debug.settings.vmArgs": "--module-path \"C:\\javafx-sdk\\javafx-sdk-25.0.2\\lib\" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics"
+}
