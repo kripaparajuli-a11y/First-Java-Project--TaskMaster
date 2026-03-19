@@ -91,12 +91,27 @@ public class DashboardController {
         String priority = priorityBox.getValue();
         String type = typeBox.getValue();
 
-        if (title.isEmpty() || course.isEmpty() ||
+       if (title.isEmpty() || course.isEmpty() ||
             deadline.isEmpty() || priority == null || type == null) {
             messageLabel.setText("Please fill in all fields!");
             messageLabel.setStyle("-fx-text-fill: red;");
             return;
         }
+
+
+        try {
+            java.time.LocalDate deadlineDate = java.time.LocalDate.parse(deadline);
+            java.time.LocalDate today = java.time.LocalDate.now();
+            if (deadlineDate.isBefore(today)) {
+                messageLabel.setText("Deadline cannot be in the past!");
+                messageLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
+        } catch (Exception e) {
+            messageLabel.setText("Invalid date format! Use YYYY-MM-DD (e.g. 2026-04-11)");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        } 
 
         try {
             // First insert course if not exists
