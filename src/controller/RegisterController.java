@@ -1,0 +1,94 @@
+package controller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import database.DatabaseManager;
+import java.sql.*;
+
+public class RegisterController {
+
+    @FXML private TextField nameField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label messageLabel;
+    @FXML private Button loginLinkButton;
+
+    @FXML
+    public void handleRegister() {
+        String name     = nameField.getText().trim();
+        String email    = emailField.getText().trim();
+        String password = passwordField.getText().trim();
+
+        // Validate fields
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            showMessage("Please fill in all fields!", "red");
+            return;
+        }
+
+        if (!email.contains("@") || !email.contains(".")) {
+            showMessage("Please enter a valid email address!", "red");
+            return;
+        }
+
+        if (password.length() < 4) {
+            showMessage("Password must be at least 4 characters!", "red");
+            return;
+        }
+
+        // Save to database
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+
+            // Check if email already exists
+            String checkSql = "SELECT * FROM student WHERE email = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, email);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                showMessage("An account with this email already exists!", "red");
+                return;
+            }
+
+            // Insert new student
+            String sql = "INSERT INTO student (name, email, password) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.executeUpdate();
+
+            showMessage("Account created successfully! You can now log in.", "green");
+            clearFields();
+
+        } catch (SQLException e) {
+            showMessage("Error creating account: " + e.getMessage(), "red");
+        }
+    }
+
+    @FXML
+    public void goToLogin() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/login.fxml"));
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 500, 550);
+            javafx.stage.Stage stage = 
+                (javafx.stage.Stage) loginLinkButton.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("TaskMaster");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void showMessage(String msg, String color) {
+        messageLabel.setText(msg);
+        messageLabel.setStyle("-fx-text-fill: " + color + ";");
+    }
+
+    private void clearFields() {
+        nameField.clear();
+        emailField.clear();
+        passwordField.clear();
+    }
+}

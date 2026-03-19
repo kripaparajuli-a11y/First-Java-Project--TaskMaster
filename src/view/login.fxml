@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.LoginController"
@@ -16,10 +15,11 @@
     <Label text="Student Assignment Manager"
            style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;"/>
 
-    <VBox spacing="10" style="-fx-background-color: white;
-                               -fx-padding: 30;
-                               -fx-background-radius: 10;
-                               -fx-effect: dropshadow(gaussian, #cccccc, 10, 0, 0, 2);">
+    <VBox spacing="10"
+          style="-fx-background-color: white;
+                 -fx-padding: 30;
+                 -fx-background-radius: 10;
+                 -fx-effect: dropshadow(gaussian, #cccccc, 10, 0, 0, 2);">
 
         <Label text="Email:" style="-fx-font-size: 13px;"/>
         <TextField fx:id="emailField"
@@ -47,5 +47,17 @@
                style="-fx-font-size: 12px;"
                alignment="CENTER"
                maxWidth="Infinity"/>
+
+        <Separator/>
+
+        <Button fx:id="registerButton"
+                text="Don't have an account? Register here"
+                onAction="#goToRegister"
+                style="-fx-background-color: transparent;
+                       -fx-text-fill: #27ae60;
+                       -fx-font-size: 12px;
+                       -fx-cursor: hand;
+                       -fx-underline: true;"
+                maxWidth="Infinity"/>
     </VBox>
 </VBox>

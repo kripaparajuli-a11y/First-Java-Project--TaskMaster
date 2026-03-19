@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.LoginController"
+      fx:controller="controller.RegisterController"
       alignment="CENTER"
       spacing="15"
       style="-fx-background-color: #f0f4f8; -fx-padding: 50;">
@@ -12,7 +12,7 @@
     <Label text="TaskMaster"
            style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
-    <Label text="Student Assignment Manager"
+    <Label text="Create a New Account"
            style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;"/>
 
     <VBox spacing="10"
@@ -21,6 +21,11 @@
                  -fx-background-radius: 10;
                  -fx-effect: dropshadow(gaussian, #cccccc, 10, 0, 0, 2);">
 
+        <Label text="Full Name:" style="-fx-font-size: 13px;"/>
+        <TextField fx:id="nameField"
+                   promptText="Enter your full name"
+                   style="-fx-font-size: 13px; -fx-padding: 8;"/>
+
         <Label text="Email:" style="-fx-font-size: 13px;"/>
         <TextField fx:id="emailField"
                    promptText="Enter your email"
@@ -28,13 +33,12 @@
 
         <Label text="Password:" style="-fx-font-size: 13px;"/>
         <PasswordField fx:id="passwordField"
-                       promptText="Enter your password"
+                       promptText="Enter your password (min. 4 characters)"
                        style="-fx-font-size: 13px; -fx-padding: 8;"/>
 
-        <Button fx:id="loginButton"
-                text="Login"
-                onAction="#handleLogin"
-                style="-fx-background-color: #3498db;
+        <Button text="Create Account"
+                onAction="#handleRegister"
+                style="-fx-background-color: #27ae60;
                        -fx-text-fill: white;
                        -fx-font-size: 14px;
                        -fx-padding: 10 20;
@@ -46,15 +50,16 @@
                text=""
                style="-fx-font-size: 12px;"
                alignment="CENTER"
-               maxWidth="Infinity"/>
+               maxWidth="Infinity"
+               wrapText="true"/>
 
         <Separator/>
 
-        <Button fx:id="registerButton"
-                text="Don't have an account? Register here"
-                onAction="#goToRegister"
+        <Button fx:id="loginLinkButton"
+                text="Already have an account? Log in"
+                onAction="#goToLogin"
                 style="-fx-background-color: transparent;
-                       -fx-text-fill: #27ae60;
+                       -fx-text-fill: #2980b9;
                        -fx-font-size: 12px;
                        -fx-cursor: hand;
                        -fx-underline: true;"

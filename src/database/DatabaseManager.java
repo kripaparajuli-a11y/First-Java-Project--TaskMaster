@@ -14,7 +14,7 @@ public class DatabaseManager {
     // Database credentials
     private static final String URL = "jdbc:mysql://localhost:3306/taskmaster";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "qwe123@QWE";
 
     // Private constructor - prevents direct instantiation
     private DatabaseManager() {

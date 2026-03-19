@@ -1,49 +1,84 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import database.DatabaseManager;
+import java.sql.*;
 
 public class LoginController {
 
-    @FXML
-    private TextField emailField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Label messageLabel;
+    @FXML private Button loginButton;
+    @FXML private Button registerButton;
 
     @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private Label messageLabel;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
-    public void handleLogin() {
-        String email = emailField.getText();
-        String password = passwordField.getText();
+    public void handleLogin() throws Exception {
+        String email    = emailField.getText().trim();
+        String password = passwordField.getText().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Please enter email and password!");
-            messageLabel.setStyle("-fx-text-fill: red;");
-        } else if (email.equals("student@taskmaster.com") 
-                && password.equals("1234")) {
-            try {
+            showMessage("Please enter your email and password!", "red");
+            return;
+        }
+
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            String sql = "SELECT * FROM student WHERE email = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Login successful — get student name
+                String studentName = rs.getString("name");
+                int studentId = rs.getInt("student_id");
+
+                showMessage("Login Successful!", "green");
+
+                // Load dashboard
                 javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/view/dashboard.fxml"));
-                javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 800, 600);
-                javafx.stage.Stage stage = (javafx.stage.Stage) loginButton.getScene().getWindow();
+                javafx.scene.Parent root = loader.load();
+
+                // Pass student info to dashboard
+                DashboardController dashboard = loader.getController();
+                dashboard.setStudentInfo(studentName, studentId);
+
+                javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+                javafx.stage.Stage stage = 
+                    (javafx.stage.Stage) loginButton.getScene().getWindow();
                 stage.setScene(scene);
                 stage.setTitle("TaskMaster - Dashboard");
-            } catch (Exception e) {
-                messageLabel.setText("Error loading dashboard!");
-                System.out.println(e.getMessage());
+
+            } else {
+                showMessage("Invalid email or password!", "red");
             }
-        } else {
-            messageLabel.setText("Invalid email or password!");
-            messageLabel.setStyle("-fx-text-fill: red;");
+
+        } catch (SQLException e) {
+            showMessage("Database error: " + e.getMessage(), "red");
         }
+    }
+
+    @FXML
+    public void goToRegister() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/register.fxml"));
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 500, 580);
+            javafx.stage.Stage stage = 
+                (javafx.stage.Stage) registerButton.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("TaskMaster - Register");
+        } catch (Exception e) {
+            showMessage("Error: " + e.getMessage(), "red");
+        }
+    }
+
+    private void showMessage(String msg, String color) {
+        messageLabel.setText(msg);
+        messageLabel.setStyle("-fx-text-fill: " + color + ";");
     }
 }
