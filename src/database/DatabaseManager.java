@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import controller.GpaController;
+import javafx.fxml.FXML;
+
 public class DatabaseManager {
     // Singleton instance
     private static DatabaseManager instance;
@@ -83,5 +86,6 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.out.println("Error closing connection: " + e.getMessage());
         }
+
     }
 }

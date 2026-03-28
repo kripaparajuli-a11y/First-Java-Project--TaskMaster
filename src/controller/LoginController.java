@@ -14,7 +14,7 @@ public class LoginController {
     @FXML private Button registerButton;
 
     @FXML
-    public void handleLogin() throws Exception {
+    public void handleLogin() {
         String email    = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
@@ -32,26 +32,33 @@ public class LoginController {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // Login successful — get student name
                 String studentName = rs.getString("name");
                 int studentId = rs.getInt("student_id");
 
                 showMessage("Login Successful!", "green");
 
-                // Load dashboard
-                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/view/dashboard.fxml"));
-                javafx.scene.Parent root = loader.load();
+                javafx.animation.PauseTransition pause =
+                    new javafx.animation.PauseTransition(
+                        javafx.util.Duration.seconds(1.5));
 
-                // Pass student info to dashboard
-                DashboardController dashboard = loader.getController();
-                dashboard.setStudentInfo(studentName, studentId);
+                pause.setOnFinished(event -> {
+                    try {
+                        javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                            getClass().getResource("/view/dashboard.fxml"));
+                        javafx.scene.Parent root = loader.load();
+                        DashboardController dashboard = loader.getController();
+                        dashboard.setStudentInfo(studentName, studentId);
+                        javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+                        javafx.stage.Stage stage =
+                            (javafx.stage.Stage) loginButton.getScene().getWindow();
+                        stage.setScene(scene);
+                        stage.setTitle("TaskMaster - Dashboard");
+                    } catch (Exception e) {
+                        showMessage("Error: " + e.getMessage(), "red");
+                    }
+                });
 
-                javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
-                javafx.stage.Stage stage = 
-                    (javafx.stage.Stage) loginButton.getScene().getWindow();
-                stage.setScene(scene);
-                stage.setTitle("TaskMaster - Dashboard");
+                pause.play();
 
             } else {
                 showMessage("Invalid email or password!", "red");
@@ -68,7 +75,7 @@ public class LoginController {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                 getClass().getResource("/view/register.fxml"));
             javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 500, 580);
-            javafx.stage.Stage stage = 
+            javafx.stage.Stage stage =
                 (javafx.stage.Stage) registerButton.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("TaskMaster - Register");

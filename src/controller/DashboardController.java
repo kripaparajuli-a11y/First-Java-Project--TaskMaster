@@ -61,6 +61,7 @@ public class DashboardController {
         taskList.clear();
         try {
             Connection conn = DatabaseManager.getInstance().getConnection();
+            // Only load tasks belonging to the logged-in student
             String sql = "SELECT * FROM task WHERE student_id = " + currentStudentId;
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -132,6 +133,7 @@ public class DashboardController {
             String sql = "INSERT INTO task (student_id, course_id, title, description, " +
             "deadline, priority, status, task_type) VALUES (?, ?, ?, '', ?, ?, 'Not Started', ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            // When adding a task, save it under the correct student
             stmt.setInt(1, currentStudentId);
             stmt.setInt(2, courseId);
             stmt.setString(3, title);
@@ -140,7 +142,7 @@ public class DashboardController {
             stmt.setString(6, type);
             stmt.executeUpdate(); 
 
-            messageLabel.setText("Task saved to database!");
+            messageLabel.setText("Task saved!");
             messageLabel.setStyle("-fx-text-fill: green;");
             clearFields();
             loadTasksFromDatabase();
@@ -201,5 +203,22 @@ public class DashboardController {
         deadlineField.clear();
         priorityBox.setValue(null);
         typeBox.setValue(null);
+    }
+    @FXML
+    public void openGpa() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/gpa.fxml"));
+            javafx.scene.Parent root = loader.load();
+            GpaController gpa = loader.getController();
+            gpa.setStudentId(currentStudentId);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+            javafx.stage.Stage stage =
+                (javafx.stage.Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("TaskMaster - GPA Calculator");
+        } catch (Exception e) {
+            System.out.println("Error opening GPA: " + e.getMessage());
+        }
     }
 }
