@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.StudySessionController"
+      spacing="10"
+      style="-fx-background-color: #f0f4f8; -fx-padding: 20;">
+
+    <!-- Header -->
+    <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15; -fx-background-radius: 8;">
+        <Button fx:id="backButton"
+                text="← Back"
+                onAction="#goBack"
+                style="-fx-background-color: #3498db;
+                       -fx-text-fill: white;
+                       -fx-padding: 6 14;
+                       -fx-background-radius: 5;
+                       -fx-cursor: hand;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Study Session Timer"
+               style="-fx-text-fill: white;
+                      -fx-font-size: 18px;
+                      -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="TaskMaster"
+               style="-fx-text-fill: #3498db;
+                      -fx-font-size: 18px;
+                      -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Timer Section -->
+    <VBox alignment="CENTER" spacing="15"
+          style="-fx-background-color: white;
+                 -fx-padding: 25;
+                 -fx-background-radius: 8;">
+
+        <Label text="Select a task and start studying!"
+               style="-fx-font-size: 13px;
+                      -fx-text-fill: #7f8c8d;"/>
+
+        <ComboBox fx:id="taskComboBox"
+                  promptText="Select a task to study for..."
+                  style="-fx-padding: 8; -fx-font-size: 13px;"
+                  maxWidth="400"/>
+
+        <!-- Big Timer Display -->
+        <Label fx:id="timerLabel"
+               text="00:00:00"
+               style="-fx-font-size: 52px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #2c3e50;
+                      -fx-font-family: 'Courier New';"/>
+
+        <Label fx:id="sessionStatusLabel"
+               text=""
+               style="-fx-font-size: 13px;
+                      -fx-text-fill: #7f8c8d;"/>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="startButton"
+                    text="▶  Start Studying"
+                    onAction="#handleStart"
+                    style="-fx-background-color: #27ae60;
+                           -fx-text-fill: white;
+                           -fx-font-size: 14px;
+                           -fx-padding: 10 25;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;"/>
+            <Button fx:id="stopButton"
+                    text="■  Stop Session"
+                    onAction="#handleStop"
+                    style="-fx-background-color: #e74c3c;
+                           -fx-text-fill: white;
+                           -fx-font-size: 14px;
+                           -fx-padding: 10 25;
+                           -fx-background-radius: 5;
+                           -fx-cursor: hand;"/>
+        </HBox>
+
+        <Label fx:id="messageLabel"
+               text=""
+               style="-fx-font-size: 12px;"/>
+    </VBox>
+
+    <!-- Session History Table -->
+    <VBox spacing="8" VBox.vgrow="ALWAYS"
+          style="-fx-background-color: white;
+                 -fx-padding: 15;
+                 -fx-background-radius: 8;">
+        <Label text="Study Session History"
+               style="-fx-font-size: 15px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #2c3e50;"/>
+        <TableView fx:id="sessionTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="taskColumn"
+                             text="Task"
+                             prefWidth="300"/>
+                <TableColumn fx:id="startColumn"
+                             text="Date and Time"
+                             prefWidth="200"/>
+                <TableColumn fx:id="durationColumn"
+                             text="Duration"
+                             prefWidth="100"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox>

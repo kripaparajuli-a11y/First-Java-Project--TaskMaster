@@ -221,4 +221,21 @@ public class DashboardController {
             System.out.println("Error opening GPA: " + e.getMessage());
         }
     }
+    @FXML
+    public void openStudyTimer() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/study_session.fxml"));
+            javafx.scene.Parent root = loader.load();
+            StudySessionController studySession = loader.getController();
+            studySession.setStudentId(currentStudentId);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+            javafx.stage.Stage stage =
+                (javafx.stage.Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("TaskMaster - Study Timer");
+        } catch (Exception e) {
+            System.out.println("Error opening Study Timer: " + e.getMessage());
+        }
+    }
 }
