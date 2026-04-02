@@ -5,7 +5,6 @@ import javafx.scene.control.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Task;
-import model.TaskFactory;
 import database.DatabaseManager;
 import java.sql.*;
 
@@ -55,6 +54,7 @@ public class DashboardController {
         welcomeLabel.setText("Welcome, " + name + "!");
         this.currentStudentId = studentId;
         loadTasksFromDatabase();
+        checkUpcomingDeadlines();
     }
 
     private void loadTasksFromDatabase() {
@@ -117,9 +117,6 @@ public class DashboardController {
         try {
             // First insert course if not exists
             Connection conn = DatabaseManager.getInstance().getConnection();
-
-            String courseSql = "INSERT INTO course (course_name) VALUES (?) " +
-                              "ON DUPLICATE KEY UPDATE course_id=LAST_INSERT_ID(course_id)";
             PreparedStatement courseStmt = conn.prepareStatement(
                 "INSERT INTO course (course_name) VALUES (?)",
                 Statement.RETURN_GENERATED_KEYS);
@@ -236,6 +233,61 @@ public class DashboardController {
             stage.setTitle("TaskMaster - Study Timer");
         } catch (Exception e) {
             System.out.println("Error opening Study Timer: " + e.getMessage());
+        }
+    }
+    private void checkUpcomingDeadlines() {
+        try {
+            Connection conn = DatabaseManager.getInstance().getConnection();
+            String sql = "SELECT title, deadline FROM task WHERE student_id = ? " +
+                        "AND status != 'Completed' AND deadline BETWEEN CURDATE() " +
+                        "AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, currentStudentId);
+            ResultSet rs = stmt.executeQuery();
+
+            StringBuilder alertMessage = new StringBuilder();
+            final int[] count = {0};
+
+            while (rs.next()) {
+                alertMessage.append("• ")
+                        .append(rs.getString("title"))
+                        .append(" — due ")
+                        .append(rs.getString("deadline"))
+                        .append("\n");
+                count[0]++;
+            }
+
+            if (count[0] > 0) {
+                javafx.application.Platform.runLater(() -> {
+                    javafx.scene.control.Alert alert =
+                        new javafx.scene.control.Alert(
+                            javafx.scene.control.Alert.AlertType.WARNING);
+                    alert.setTitle("Upcoming Deadlines!");
+                    alert.setHeaderText("You have " + count[0] + " task(s) due in the next 3 days:");
+                    alert.setContentText(alertMessage.toString());
+                    alert.showAndWait();
+                });
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error checking deadlines: " + e.getMessage());
+        }
+    }
+    @FXML
+    public void openCharts() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/chart.fxml"));
+            javafx.scene.Parent root = loader.load();
+            ChartController chart = loader.getController();
+            chart.setStudentId(currentStudentId);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+            javafx.stage.Stage stage =
+                (javafx.stage.Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("TaskMaster - Workload Charts");
+        } catch (Exception e) {
+            System.out.println("Error opening Charts: " + e.getMessage());
         }
     }
 }
