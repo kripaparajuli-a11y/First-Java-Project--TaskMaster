@@ -19,19 +19,21 @@ public class RegisterController {
         String email    = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
-        // Validate fields
+        // Check empty fields
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             showMessage("Please fill in all fields!", "red");
             return;
         }
 
-        if (!email.contains("@") || !email.contains(".")) {
+        // Better email validation using regex
+        if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
             showMessage("Please enter a valid email address!", "red");
             return;
         }
 
-        if (password.length() < 4) {
-            showMessage("Password must be at least 4 characters!", "red");
+        // Stronger password rule
+        if (password.length() < 6) {
+            showMessage("Password must be at least 6 characters!", "red");
             return;
         }
 
@@ -64,20 +66,20 @@ public class RegisterController {
         } catch (SQLException e) {
             showMessage("Error creating account: " + e.getMessage(), "red");
         }
-    }
+    }   // <-- handleRegister() ends here
 
     @FXML
     public void goToLogin() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                 getClass().getResource("/view/login.fxml"));
-            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 500, 550);
-            javafx.stage.Stage stage = 
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 1000, 620);
+            javafx.stage.Stage stage =
                 (javafx.stage.Stage) loginLinkButton.getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("TaskMaster");
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            showMessage("Error: " + e.getMessage(), "red");
         }
     }
 
@@ -91,4 +93,4 @@ public class RegisterController {
         emailField.clear();
         passwordField.clear();
     }
-}
+}   

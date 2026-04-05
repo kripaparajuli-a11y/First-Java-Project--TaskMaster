@@ -9,9 +9,10 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(
             getClass().getResource("/view/login.fxml"));
-        Scene scene = new Scene(loader.load(), 500, 500);
+        Scene scene = new Scene(loader.load(), 1000, 650);
         stage.setTitle("TaskMaster");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

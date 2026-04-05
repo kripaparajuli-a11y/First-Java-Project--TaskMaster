@@ -17,8 +17,17 @@ public class ChartController {
     @FXML private Label totalLabel;
 
     private int currentStudentId = 1;
+    private String currentStudentName = "Student";
+    private String currentStudentEmail = "";
 
     public void setStudentId(int studentId) {
+        this.currentStudentId = studentId;
+        loadCharts();
+    }
+
+    public void setStudentInfo(String name, String email, int studentId) {
+        this.currentStudentName = name;
+        this.currentStudentEmail = email;
         this.currentStudentId = studentId;
         loadCharts();
     }
@@ -33,7 +42,6 @@ public class ChartController {
         try {
             Connection conn = DatabaseManager.getInstance().getConnection();
 
-            // ── Pie Chart — tasks by status ──────────────────────────
             String statusSql = "SELECT status, COUNT(*) as count FROM task " +
                               "WHERE student_id = ? GROUP BY status";
             PreparedStatement statusStmt = conn.prepareStatement(statusSql);
@@ -55,7 +63,6 @@ public class ChartController {
             statusPieChart.setTitle("Tasks by Status");
             totalLabel.setText("Total Tasks: " + total);
 
-            // ── Bar Chart — tasks by priority ─────────────────────────
             String prioritySql = "SELECT priority, COUNT(*) as count FROM task " +
                                 "WHERE student_id = ? GROUP BY priority";
             PreparedStatement priorityStmt = conn.prepareStatement(prioritySql);
@@ -87,8 +94,8 @@ public class ChartController {
                 getClass().getResource("/view/dashboard.fxml"));
             javafx.scene.Parent root = loader.load();
             DashboardController dashboard = loader.getController();
-            dashboard.setStudentInfo("Student", currentStudentId);
-            javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+            dashboard.setStudentInfo(currentStudentName, currentStudentId, currentStudentEmail);
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 1100, 680);
             javafx.stage.Stage stage =
                 (javafx.stage.Stage) backButton.getScene().getWindow();
             stage.setScene(scene);

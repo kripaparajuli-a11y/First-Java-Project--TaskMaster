@@ -32,32 +32,32 @@ public class LoginController {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String studentName = rs.getString("name");
-                int studentId = rs.getInt("student_id");
+                String studentName  = rs.getString("name");
+                String studentEmail = rs.getString("email");
+                int studentId       = rs.getInt("student_id");
 
                 showMessage("Login Successful!", "green");
 
                 javafx.animation.PauseTransition pause =
                     new javafx.animation.PauseTransition(
-                        javafx.util.Duration.seconds(1.5));
-
+                        javafx.util.Duration.seconds(1));
                 pause.setOnFinished(event -> {
                     try {
                         javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                            getClass().getResource("/view/dashboard.fxml"));
+                            getClass().getResource("/view/home.fxml"));
                         javafx.scene.Parent root = loader.load();
                         DashboardController dashboard = loader.getController();
-                        dashboard.setStudentInfo(studentName, studentId);
-                        javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+                        dashboard.setStudentInfo(studentName, studentId, studentEmail);
+                        javafx.scene.Scene scene = new javafx.scene.Scene(root, 1100, 680);
                         javafx.stage.Stage stage =
                             (javafx.stage.Stage) loginButton.getScene().getWindow();
+                        stage.setResizable(false);
                         stage.setScene(scene);
                         stage.setTitle("TaskMaster - Dashboard");
                     } catch (Exception e) {
                         showMessage("Error: " + e.getMessage(), "red");
                     }
                 });
-
                 pause.play();
 
             } else {
@@ -74,7 +74,7 @@ public class LoginController {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                 getClass().getResource("/view/register.fxml"));
-            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 500, 580);
+            javafx.scene.Scene scene = new javafx.scene.Scene(loader.load(), 1000, 620);
             javafx.stage.Stage stage =
                 (javafx.stage.Stage) registerButton.getScene().getWindow();
             stage.setScene(scene);
