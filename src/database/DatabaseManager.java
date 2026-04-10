@@ -1,31 +1,50 @@
 package database;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DatabaseManager {
-    // Singleton instance
-    private static DatabaseManager instance;
+
+    // Singleton - eager initialization (thread-safe, no null check needed)
+    private static final DatabaseManager instance = new DatabaseManager();
     private Connection connection;
 
-    // Database credentials
-    private static final String URL = "jdbc:mysql://localhost:3306/taskmaster";
-    private static final String USER = "root";
-    private static final String PASSWORD = "qwe123@QWE";
+    // Loaded from db.properties, NOT hardcoded
+    private static String URL;
+    private static String USER;
+    private static String PASSWORD;
 
-    // Private constructor - prevents direct instantiation
+    // Private constructor
     private DatabaseManager() {
+        loadConfig();
         connect();
     }
 
-    // Singleton - only one instance exists
-    public static DatabaseManager getInstance() {
-        if (instance == null) {
-            instance = new DatabaseManager();
+    // Load DB credentials from config file
+    private void loadConfig() {
+        try (InputStream input = getClass().getClassLoader()
+                .getResourceAsStream("db.properties")) {
+            if (input == null) {
+                System.out.println("db.properties not found!");
+                return;
+            }
+            Properties prop = new Properties();
+            prop.load(input);
+            URL      = prop.getProperty("db.url");
+            USER     = prop.getProperty("db.user");
+            PASSWORD = prop.getProperty("db.password");
+        } catch (Exception e) {
+            System.out.println("Failed to load config: " + e.getMessage());
         }
+    }
+
+    // Singleton accessor
+    public static DatabaseManager getInstance() {
         return instance;
     }
 
@@ -40,7 +59,7 @@ public class DatabaseManager {
         }
     }
 
-    // Get connection — reconnects automatically if the connection dropped
+    // Get connection - reconnects if dropped
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed() || !connection.isValid(2)) {
@@ -54,7 +73,7 @@ public class DatabaseManager {
         return connection;
     }
 
-    // Execute query (SELECT)
+    // Execute SELECT query
     public ResultSet executeQuery(String sql, Object... params) {
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -68,10 +87,9 @@ public class DatabaseManager {
         }
     }
 
-    // Execute update (INSERT, UPDATE, DELETE)
+    // Execute INSERT/UPDATE/DELETE - uses try-with-resources to close statement
     public int executeUpdate(String sql, Object... params) {
-        try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
                 stmt.setObject(i + 1, params[i]);
             }
@@ -92,6 +110,5 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.out.println("Error closing connection: " + e.getMessage());
         }
-
     }
 }

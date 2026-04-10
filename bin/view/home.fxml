@@ -66,6 +66,10 @@
                     style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
                            -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
+            <Button text="📊  Report" onAction="#openReport" maxWidth="Infinity"
+                    style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
+                           -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
+                           -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
         </VBox>
 
         <Region VBox.vgrow="ALWAYS"/>
@@ -381,6 +385,14 @@
                                    -fx-font-size: 12px; -fx-font-weight: bold;
                                    -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
                                    -fx-border-color: #bfdbfe; -fx-border-radius: 10; -fx-border-width: 1;
+                                   -fx-alignment: CENTER_LEFT;"/>
+
+                    <!-- Report button -->
+                    <Button text="📊   View Report" onAction="#openReport" maxWidth="Infinity"
+                            style="-fx-background-color: #fdf4ff; -fx-text-fill: #3b0764;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-border-color: #e9d5ff; -fx-border-radius: 10; -fx-border-width: 1;
                                    -fx-alignment: CENTER_LEFT;"/>
 
                     <Region VBox.vgrow="ALWAYS"/>
