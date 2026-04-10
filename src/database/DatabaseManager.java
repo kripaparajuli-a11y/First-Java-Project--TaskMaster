@@ -6,9 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import controller.GpaController;
-import javafx.fxml.FXML;
-
 public class DatabaseManager {
     // Singleton instance
     private static DatabaseManager instance;
@@ -43,8 +40,17 @@ public class DatabaseManager {
         }
     }
 
-    // Get connection
+    // Get connection — reconnects automatically if the connection dropped
     public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed() || !connection.isValid(2)) {
+                System.out.println("Reconnecting to database...");
+                connect();
+            }
+        } catch (SQLException e) {
+            System.out.println("Connection check failed, reconnecting: " + e.getMessage());
+            connect();
+        }
         return connection;
     }
 

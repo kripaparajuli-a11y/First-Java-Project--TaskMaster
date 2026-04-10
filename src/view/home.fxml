@@ -2,148 +2,407 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
 
 <HBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.DashboardController"
+      fx:controller="controller.HomeController"
       prefWidth="1100" prefHeight="680"
-      style="-fx-background-color: #f0f0f5;">
+      style="-fx-background-color: #ede7f6;">
 
-    <!-- LEFT SIDEBAR -->
-    <VBox prefWidth="220"
+    <!-- ── LEFT SIDEBAR ─────────────────────────────────────────────────── -->
+    <VBox prefWidth="230"
           style="-fx-background-color: #1a1a2e; -fx-padding: 0;">
 
-        <!-- Profile Section -->
-        <VBox alignment="CENTER" spacing="6"
+        <!-- Brand -->
+        <VBox alignment="CENTER" spacing="4"
               style="-fx-padding: 24 16 20 16;
-                     -fx-border-color: transparent transparent #2d2d44 transparent;
+                     -fx-border-color: transparent transparent #581c87 transparent;
                      -fx-border-width: 0 0 1 0;">
-            <Label text="˙ᵕ˙" style="-fx-font-size: 36px; -fx-text-fill: white;"/>
-            <Label fx:id="studentNameLabel" text="Student"
-                   style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
-            <Label fx:id="studentEmailLabel" text="@email"
-                   style="-fx-text-fill: #a855f7; -fx-font-size: 10px;"
-                   wrapText="true" maxWidth="180" alignment="CENTER"/>
+            <Label text="📚" style="-fx-font-size: 32px;"/>
+            <Label text="TaskMaster"
+                   style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
         </VBox>
 
-        <!-- Nav Buttons — Home is active on this page -->
-        <VBox spacing="2" style="-fx-padding: 12 10;">
+        <!-- Profile -->
+        <VBox alignment="CENTER" spacing="4"
+              style="-fx-padding: 20 16 20 16;
+                     -fx-border-color: transparent transparent #581c87 transparent;
+                     -fx-border-width: 0 0 1 0;">
+            <StackPane>
+                <Circle fx:id="avatarCircle" radius="28"
+                        style="-fx-fill: #a855f7;"/>
+                <Label fx:id="avatarInitial" text="S"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            </StackPane>
+            <Label fx:id="studentNameLabel" text="Student"
+                   style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            <Label fx:id="studentEmailLabel" text=""
+                   style="-fx-text-fill: #c084fc; -fx-font-size: 11px;"
+                   wrapText="true" maxWidth="190" alignment="CENTER"/>
+        </VBox>
 
-            <!-- Home active -->
-            <Button text="🏠  Home" onAction="#goHome" maxWidth="Infinity"
-                    style="-fx-background-color: #2d2d44; -fx-text-fill: white;
+        <!-- Nav -->
+        <VBox spacing="4" style="-fx-padding: 16 12;">
+            <Button text="🏠  Home" maxWidth="Infinity"
+                    style="-fx-background-color: #581c87; -fx-text-fill: white;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
-                           -fx-cursor: hand; -fx-alignment: CENTER_LEFT;
+                           -fx-cursor: hand; -fx-alignment: CENTER_LEFT; -fx-font-weight: bold;
                            -fx-border-color: #a855f7; -fx-border-width: 0 0 0 3;
                            -fx-border-radius: 8;"/>
-
             <Button text="✅  My Tasks" onAction="#openTasks" maxWidth="Infinity"
-                    style="-fx-background-color: transparent; -fx-text-fill: #b0b0c0;
+                    style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
                            -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
-
             <Button text="📅  Calendar" onAction="#openCalendar" maxWidth="Infinity"
-                    style="-fx-background-color: transparent; -fx-text-fill: #b0b0c0;
+                    style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
                            -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
-
             <Button text="🎓  My Grades" onAction="#openGpa" maxWidth="Infinity"
-                    style="-fx-background-color: transparent; -fx-text-fill: #b0b0c0;
+                    style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
                            -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
-
             <Button text="⏱  Study Timer" onAction="#openStudyTimer" maxWidth="Infinity"
-                    style="-fx-background-color: transparent; -fx-text-fill: #b0b0c0;
+                    style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                            -fx-font-size: 13px; -fx-padding: 10 14; -fx-background-radius: 8;
                            -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
         </VBox>
 
         <Region VBox.vgrow="ALWAYS"/>
-
-        <!-- Thin divider line above logout -->
-        <Region prefHeight="1" style="-fx-background-color: #2d2d44;"/>
-
-        <!-- Logout button -->
+        <Region prefHeight="1" style="-fx-background-color: #581c87;"/>
         <Button text="↪  Log Out" onAction="#handleLogout" maxWidth="Infinity"
-                style="-fx-background-color: transparent; -fx-text-fill: #b0b0c0;
+                style="-fx-background-color: transparent; -fx-text-fill: #d8b4fe;
                        -fx-font-size: 13px; -fx-padding: 14 14;
                        -fx-cursor: hand; -fx-alignment: CENTER_LEFT;"/>
     </VBox>
 
-    <!-- MAIN CONTENT — HOME -->
-    <VBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20"
-          style="-fx-padding: 40; -fx-background-color: #f0f0f5;">
+    <!-- ── MAIN CONTENT ──────────────────────────────────────────────────── -->
+    <ScrollPane HBox.hgrow="ALWAYS" fitToWidth="true"
+                style="-fx-background: #ede7f6; -fx-background-color: #ede7f6;
+                       -fx-border-color: transparent;"
+                vbarPolicy="NEVER" hbarPolicy="NEVER">
 
-        <Label text="👋" style="-fx-font-size: 60px;"/>
+        <VBox spacing="20" style="-fx-padding: 28 28 28 28; -fx-background-color: #ede7f6;">
 
-        <HBox spacing="0" alignment="CENTER_LEFT">
-            <Region prefWidth="5" prefHeight="60"
-                style="-fx-background-color: #a855f7; -fx-background-radius: 3;"/>
-            <VBox spacing="4" style="-fx-padding: 0 0 0 12;">
-                <Label text="Welcome"
-                    style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label fx:id="welcomeLabel" text="Student!"
-                    style="-fx-font-size: 14px; -fx-text-fill: #a855f7; -fx-font-weight: bold;"/>
-            </VBox>
-        </HBox>
-
-        <Label text="What would you like to do today?"
-               style="-fx-font-size: 14px; -fx-text-fill: #9e9e9e;"/>
-
-        <!-- Quick Action Cards -->
-        <HBox spacing="20" alignment="CENTER">
-
-            <VBox alignment="CENTER" spacing="10" prefWidth="180" prefHeight="140"
-                  onMouseClicked="#openTasks"
+            <!-- Header Row -->
+            <HBox alignment="CENTER_LEFT" spacing="0"
                   style="-fx-background-color: white; -fx-background-radius: 12;
-                         -fx-padding: 20; -fx-cursor: hand;
-                         -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-border-width: 0.5;">
-                <Label text="✅" style="-fx-font-size: 30px;"/>
-                <Label text="My Tasks"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="View and manage tasks"
-                       style="-fx-font-size: 11px; -fx-text-fill: #9e9e9e;"
-                       wrapText="true" alignment="CENTER"/>
-            </VBox>
+                         -fx-padding: 14 20; -fx-border-color: #d8b4fe;
+                         -fx-border-radius: 12; -fx-border-width: 1;">
+                <HBox spacing="0" alignment="CENTER_LEFT">
+                    <Region prefWidth="5" prefHeight="44"
+                            style="-fx-background-color: #3b0764; -fx-background-radius: 3;"/>
+                    <VBox spacing="3" style="-fx-padding: 0 0 0 12;">
+                        <Label fx:id="greetingLabel" text="Good morning,"
+                               style="-fx-font-size: 12px; -fx-text-fill: #a855f7;"/>
+                        <Label fx:id="welcomeLabel" text="Student! 👋"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                    </VBox>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox alignment="CENTER_RIGHT" spacing="2">
+                    <Label fx:id="dateLabel" text=""
+                           style="-fx-font-size: 12px; -fx-text-fill: #a855f7;"/>
+                    <Label fx:id="studyTodayLabel" text="0 min studied today"
+                           style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #581c87;"/>
+                </VBox>
+            </HBox>
 
-            <VBox alignment="CENTER" spacing="10" prefWidth="180" prefHeight="140"
-                  onMouseClicked="#openGpa"
-                  style="-fx-background-color: white; -fx-background-radius: 12;
-                         -fx-padding: 20; -fx-cursor: hand;
-                         -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-border-width: 0.5;">
-                <Label text="🎓" style="-fx-font-size: 30px;"/>
-                <Label text="My Grades"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Track your grades"
-                       style="-fx-font-size: 11px; -fx-text-fill: #9e9e9e;"
-                       wrapText="true" alignment="CENTER"/>
-            </VBox>
+            <!-- ── STAT CARDS ROW ──────────────────────────────────────── -->
+            <HBox spacing="14">
 
-            <VBox alignment="CENTER" spacing="10" prefWidth="180" prefHeight="140"
-                  onMouseClicked="#openStudyTimer"
-                  style="-fx-background-color: white; -fx-background-radius: 12;
-                         -fx-padding: 20; -fx-cursor: hand;
-                         -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-border-width: 0.5;">
-                <Label text="⏱" style="-fx-font-size: 30px;"/>
-                <Label text="Study Timer"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Track study sessions"
-                       style="-fx-font-size: 11px; -fx-text-fill: #9e9e9e;"
-                       wrapText="true" alignment="CENTER"/>
-            </VBox>
+                <!-- Total Tasks -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 18 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="📋" style="-fx-font-size: 20px;"/>
+                        <Label text="Total Tasks"
+                               style="-fx-font-size: 11px; -fx-text-fill: #a855f7;"/>
+                    </HBox>
+                    <Label fx:id="totalTasksLabel" text="0"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                    <Label fx:id="totalTasksSubLabel" text="across all courses"
+                           style="-fx-font-size: 10px; -fx-text-fill: #a855f7;"/>
+                </VBox>
 
-            <VBox alignment="CENTER" spacing="10" prefWidth="180" prefHeight="140"
-                  onMouseClicked="#openCalendar"
-                  style="-fx-background-color: white; -fx-background-radius: 12;
-                         -fx-padding: 20; -fx-cursor: hand;
-                         -fx-border-color: #e0e0e0; -fx-border-radius: 12; -fx-border-width: 0.5;">
-                <Label text="📅" style="-fx-font-size: 30px;"/>
-                <Label text="Calendar"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1a1a2e;"/>
-                <Label text="Coming soon"
-                       style="-fx-font-size: 11px; -fx-text-fill: #9e9e9e;"
-                       wrapText="true" alignment="CENTER"/>
-            </VBox>
+                <!-- Completed -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #f0fdf4; -fx-background-radius: 14;
+                             -fx-padding: 18 20; -fx-border-color: #bbf7d0;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="✅" style="-fx-font-size: 20px;"/>
+                        <Label text="Completed"
+                               style="-fx-font-size: 11px; -fx-text-fill: #15803d;"/>
+                    </HBox>
+                    <Label fx:id="completedLabel" text="0"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #15803d;"/>
+                    <Label fx:id="completedPctLabel" text="0% done"
+                           style="-fx-font-size: 10px; -fx-text-fill: #15803d;"/>
+                </VBox>
 
-        </HBox>
-    </VBox>
+                <!-- Overdue -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #fff1f2; -fx-background-radius: 14;
+                             -fx-padding: 18 20; -fx-border-color: #fecdd3;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="⚠️" style="-fx-font-size: 20px;"/>
+                        <Label text="Overdue"
+                               style="-fx-font-size: 11px; -fx-text-fill: #b91c1c;"/>
+                    </HBox>
+                    <Label fx:id="overdueLabel" text="0"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #b91c1c;"/>
+                    <Label text="need attention"
+                           style="-fx-font-size: 10px; -fx-text-fill: #b91c1c;"/>
+                </VBox>
+
+                <!-- In Progress -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #fffbeb; -fx-background-radius: 14;
+                             -fx-padding: 18 20; -fx-border-color: #fde68a;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🔄" style="-fx-font-size: 20px;"/>
+                        <Label text="In Progress"
+                               style="-fx-font-size: 11px; -fx-text-fill: #b45309;"/>
+                    </HBox>
+                    <Label fx:id="inProgressLabel" text="0"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #b45309;"/>
+                    <Label text="currently active"
+                           style="-fx-font-size: 10px; -fx-text-fill: #b45309;"/>
+                </VBox>
+
+                <!-- Study Time -->
+                <VBox spacing="8" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #f5f0ff; -fx-background-radius: 14;
+                             -fx-padding: 18 20; -fx-border-color: #e9d5ff;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="⏱" style="-fx-font-size: 20px;"/>
+                        <Label text="Study Time"
+                               style="-fx-font-size: 11px; -fx-text-fill: #7e22ce;"/>
+                    </HBox>
+                    <Label fx:id="totalStudyLabel" text="0h"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #581c87;"/>
+                    <Label text="total this week"
+                           style="-fx-font-size: 10px; -fx-text-fill: #7e22ce;"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- ── CHARTS ROW ──────────────────────────────────────────── -->
+            <HBox spacing="14">
+
+                <!-- Task Status Doughnut Chart -->
+                <VBox spacing="14" prefWidth="310"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <Label text="Task Status Overview"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                    <Canvas fx:id="donutCanvas" width="270" height="200"/>
+                    <!-- Legend -->
+                    <HBox spacing="14" alignment="CENTER">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Region prefWidth="10" prefHeight="10"
+                                    style="-fx-background-color:#15803d;-fx-background-radius:3;"/>
+                            <Label text="Done" style="-fx-font-size:10px;-fx-text-fill:#6b7280;"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Region prefWidth="10" prefHeight="10"
+                                    style="-fx-background-color:#b91c1c;-fx-background-radius:3;"/>
+                            <Label text="Overdue" style="-fx-font-size:10px;-fx-text-fill:#6b7280;"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Region prefWidth="10" prefHeight="10"
+                                    style="-fx-background-color:#b45309;-fx-background-radius:3;"/>
+                            <Label text="In Prog." style="-fx-font-size:10px;-fx-text-fill:#6b7280;"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Region prefWidth="10" prefHeight="10"
+                                    style="-fx-background-color:#6d28d9;-fx-background-radius:3;"/>
+                            <Label text="Not Started" style="-fx-font-size:10px;-fx-text-fill:#6b7280;"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Study Time Bar Chart -->
+                <VBox spacing="14" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Study Sessions — Last 7 Days"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="weekTotalLabel" text="0 min total"
+                               style="-fx-font-size: 11px; -fx-text-fill: #a855f7;"/>
+                    </HBox>
+                    <Canvas fx:id="barCanvas" width="480" height="200"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- ── BOTTOM ROW: Upcoming + Priority + Quick Actions ─────── -->
+            <HBox spacing="14">
+
+                <!-- Upcoming Deadlines -->
+                <VBox spacing="10" prefWidth="330"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="📅  Upcoming Deadlines"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="View All" onAction="#openTasks"
+                                style="-fx-background-color: transparent; -fx-text-fill: #a855f7;
+                                       -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 0;"/>
+                    </HBox>
+                    <VBox fx:id="upcomingList" spacing="8"/>
+                    <Label fx:id="noUpcomingLabel" text="🎉  No deadlines in the next 7 days!"
+                           visible="false" managed="false"
+                           style="-fx-font-size: 11px; -fx-text-fill: #15803d; -fx-font-style: italic;"/>
+                </VBox>
+
+                <!-- Priority Breakdown -->
+                <VBox spacing="10" prefWidth="220"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <Label text="🎯  By Priority"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+
+                    <!-- High -->
+                    <VBox spacing="4">
+                        <HBox>
+                            <Label text="High" style="-fx-font-size:11px;-fx-text-fill:#b91c1c;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="highPriorityLabel" text="0"
+                                   style="-fx-font-size:11px;-fx-text-fill:#b91c1c;-fx-font-weight:bold;"/>
+                        </HBox>
+                        <StackPane alignment="CENTER_LEFT" prefHeight="6">
+                            <Region prefHeight="6" maxWidth="180"
+                                    style="-fx-background-color:#fecdd3;-fx-background-radius:3;"/>
+                            <Region fx:id="highBar" prefHeight="6" maxWidth="0"
+                                    style="-fx-background-color:#b91c1c;-fx-background-radius:3;"
+                                    StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                    </VBox>
+
+                    <!-- Medium -->
+                    <VBox spacing="4">
+                        <HBox>
+                            <Label text="Medium" style="-fx-font-size:11px;-fx-text-fill:#b45309;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="medPriorityLabel" text="0"
+                                   style="-fx-font-size:11px;-fx-text-fill:#b45309;-fx-font-weight:bold;"/>
+                        </HBox>
+                        <StackPane alignment="CENTER_LEFT" prefHeight="6">
+                            <Region prefHeight="6" maxWidth="180"
+                                    style="-fx-background-color:#fde68a;-fx-background-radius:3;"/>
+                            <Region fx:id="medBar" prefHeight="6" maxWidth="0"
+                                    style="-fx-background-color:#b45309;-fx-background-radius:3;"
+                                    StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                    </VBox>
+
+                    <!-- Low -->
+                    <VBox spacing="4">
+                        <HBox>
+                            <Label text="Low" style="-fx-font-size:11px;-fx-text-fill:#15803d;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="lowPriorityLabel" text="0"
+                                   style="-fx-font-size:11px;-fx-text-fill:#15803d;-fx-font-weight:bold;"/>
+                        </HBox>
+                        <StackPane alignment="CENTER_LEFT" prefHeight="6">
+                            <Region prefHeight="6" maxWidth="180"
+                                    style="-fx-background-color:#bbf7d0;-fx-background-radius:3;"/>
+                            <Region fx:id="lowBar" prefHeight="6" maxWidth="0"
+                                    style="-fx-background-color:#15803d;-fx-background-radius:3;"
+                                    StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                    </VBox>
+
+                    <!-- Overall Progress -->
+                    <VBox spacing="6" style="-fx-padding: 10 0 0 0;">
+                        <HBox>
+                            <Label text="Overall Progress"
+                                   style="-fx-font-size:11px;-fx-text-fill:#6b7280;"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label fx:id="overallPctLabel" text="0%"
+                                   style="-fx-font-size:11px;-fx-text-fill:#3b0764;-fx-font-weight:bold;"/>
+                        </HBox>
+                        <StackPane alignment="CENTER_LEFT" prefHeight="10">
+                            <Region prefHeight="10" maxWidth="180"
+                                    style="-fx-background-color:#e9d5ff;-fx-background-radius:5;"/>
+                            <Region fx:id="overallBar" prefHeight="10" maxWidth="0"
+                                    style="-fx-background-color:linear-gradient(to right, #a855f7, #6d28d9);
+                                           -fx-background-radius:5;"
+                                    StackPane.alignment="CENTER_LEFT"/>
+                        </StackPane>
+                    </VBox>
+                </VBox>
+
+                <!-- Quick Actions -->
+                <VBox spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 14;
+                             -fx-padding: 20; -fx-border-color: #d8b4fe;
+                             -fx-border-radius: 14; -fx-border-width: 1;">
+                    <Label text="⚡  Quick Actions"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+
+                    <Button text="✅   Go to My Tasks" onAction="#openTasks" maxWidth="Infinity"
+                            style="-fx-background-color: #f5f0ff; -fx-text-fill: #7e22ce;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-border-color: #e9d5ff; -fx-border-radius: 10; -fx-border-width: 1;
+                                   -fx-alignment: CENTER_LEFT;"/>
+
+                    <Button text="⏱   Start Study Timer" onAction="#openStudyTimer" maxWidth="Infinity"
+                            style="-fx-background-color: #f5f0ff; -fx-text-fill: #581c87;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-border-color: #e9d5ff; -fx-border-radius: 10; -fx-border-width: 1;
+                                   -fx-alignment: CENTER_LEFT;"/>
+
+                    <Button text="🎓   View My Grades" onAction="#openGpa" maxWidth="Infinity"
+                            style="-fx-background-color: #f0fdf4; -fx-text-fill: #15803d;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-border-color: #bbf7d0; -fx-border-radius: 10; -fx-border-width: 1;
+                                   -fx-alignment: CENTER_LEFT;"/>
+
+                    <Button text="📅   Open Calendar" onAction="#openCalendar" maxWidth="Infinity"
+                            style="-fx-background-color: #eff6ff; -fx-text-fill: #1d4ed8;
+                                   -fx-font-size: 12px; -fx-font-weight: bold;
+                                   -fx-padding: 12 16; -fx-background-radius: 10; -fx-cursor: hand;
+                                   -fx-border-color: #bfdbfe; -fx-border-radius: 10; -fx-border-width: 1;
+                                   -fx-alignment: CENTER_LEFT;"/>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                    <!-- GPA Badge -->
+                    <HBox alignment="CENTER" spacing="8"
+                          style="-fx-background-color: #f5f0ff; -fx-background-radius: 10;
+                                 -fx-padding: 12; -fx-border-color: #e9d5ff;
+                                 -fx-border-radius: 10; -fx-border-width: 1;">
+                        <Label text="🎓" style="-fx-font-size: 18px;"/>
+                        <VBox spacing="2">
+                            <Label text="Current GPA"
+                                   style="-fx-font-size: 10px; -fx-text-fill: #a855f7;"/>
+                            <Label fx:id="gpaLabel" text="—"
+                                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3b0764;"/>
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
 </HBox>

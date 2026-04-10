@@ -32,3 +32,14 @@ CREATE TABLE task (
 INSERT INTO student (name, email, password) VALUES ('Kripa Parajuli', 'student@taskmaster.com', '1234');
 
 SELECT * FROM student;
+
+show tables;
+
+DESCRIBE study_session;
+
+ALTER TABLE study_session 
+  ADD COLUMN session_type VARCHAR(50),
+  ADD COLUMN session_date DATE,
+  ADD COLUMN notes VARCHAR(255),
+  CHANGE duration_minutes duration_min INT;
+  
